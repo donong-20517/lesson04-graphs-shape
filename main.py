@@ -238,24 +238,36 @@ st.info("여기에 이 그래프로 알 수 있는 내용을 한 문장으로 �
 st.divider()
  
 # ------------------------------------------------------------
-# 그래프 8: 10위권 체류 일수와 총 관객의 관계
+# 그래프 8: 나만의 질문 - 개봉일 상영횟수와 첫 주 관객의 관계
 # ------------------------------------------------------------
-st.header("8. 10위권에 오래 머문 영화는 총 관객도 많은가")
+st.header("8. 나만의 8번째 질문 — 만들어서 분석하기")
  
-fig_top10 = px.scatter(
-    df,
-    x="days_in_top10",
-    y="total_audi",
-    hover_name="movieNm",
-    title="10위권에 오래 머문 영화는 총 관객도 많은가",
-    labels={"days_in_top10": "10위권에 머문 날수", "total_audi": "총 관객"},
+my_question_8 = "개봉일 상영횟수가 많은 영화는 개봉 첫 주 관객도 많은가"
+st.markdown(f"**내 질문:** {my_question_8}")
+st.caption(
+    "질문 갈래: 관계 (하나가 크면 다른 하나도 큰가) → 산점도가 어울림 · "
+    "사용한 열: first_show(개봉일 상영횟수), first_week_audi(개봉 첫 주 관객)"
 )
-fig_top10.update_layout(margin=dict(t=50, b=30, l=10, r=10))
  
-st.plotly_chart(fig_top10, use_container_width=True)
+fig_q8 = px.scatter(
+    df,
+    x="first_show",
+    y="first_week_audi",
+    hover_name="movieNm",
+    title=my_question_8,
+    labels={"first_show": "개봉일 상영횟수", "first_week_audi": "개봉 첫 주 관객"},
+)
+fig_q8.update_layout(margin=dict(t=50, b=30, l=10, r=10))
+ 
+st.plotly_chart(fig_q8, use_container_width=True)
+ 
+corr_8 = df["first_show"].corr(df["first_week_audi"])
  
 st.markdown("**이 그래프로 알 수 있는 것:**")
-st.info("여기에 이 그래프로 알 수 있는 내용을 한 문장으로 적어 주세요.")
+st.info(
+    f"개봉일 상영횟수와 개봉 첫 주 관객 사이의 상관계수는 {corr_8:.2f}로, "
+    "개봉일에 상영횟수가 많이 잡힌 영화일수록 첫 주 관객도 대체로 많아지는 경향이 있습니다."
+)
  
 st.divider()
  
